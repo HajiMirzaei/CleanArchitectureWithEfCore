@@ -1,2 +1,2 @@
 # CleanArchitectureWithDapper
-A clean architecture sample project with dapper and .net core 3.1
+A clean architecture sample project with ef and .net core 3.1
