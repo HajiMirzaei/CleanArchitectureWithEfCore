@@ -5,8 +5,8 @@ namespace SampleProject.Infrastructure.Data
 {
     public class SampleProjectDbContext : DbContext
     {
-
         public SampleProjectDbContext(DbContextOptions options) : base(options) { }
+        public SampleProjectDbContext(){}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

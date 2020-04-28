@@ -11,7 +11,7 @@ namespace SampleProject.Infrastructure.Data
         {
         }
 
-        public async Task<Student> GetStudentWithRegisteredCourses(int studentId)
+        public async Task<IStudent> GetStudentWithRegisteredCourses(int studentId)
         {
             var data = await _db.Students.Include(r => r.RegisteredCourses).FirstOrDefaultAsync(x => x.Id == studentId);
             return data;

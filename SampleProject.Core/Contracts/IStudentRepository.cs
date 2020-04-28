@@ -6,6 +6,6 @@ namespace SampleProject.Core.Contracts
 {
     public interface IStudentRepository : IAsyncGenericRepository<Student>
     {
-        Task<Student> GetStudentWithRegisteredCourses(int studentId);
+        Task<IStudent> GetStudentWithRegisteredCourses(int studentId);
     }
 }

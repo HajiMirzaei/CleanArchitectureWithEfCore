@@ -14,6 +14,7 @@ namespace SampleProject.Infrastructure.Test
     {
         private UnitOfWork _unitOfWork;
         private Mock<IServiceProvider> _serviceProviderMock;
+        private Mock<SampleProjectDbContext> _dbContextMock;
         //private Mock<IServiceCollection> _serviceCollectionMock;
 
         [SetUp]
@@ -21,7 +22,8 @@ namespace SampleProject.Infrastructure.Test
         {
             //_serviceCollectionMock = new Mock<IServiceCollection>();
             _serviceProviderMock = new Mock<IServiceProvider>();
-            _unitOfWork = new UnitOfWork(_serviceProviderMock.Object);
+            _dbContextMock = new Mock<SampleProjectDbContext>();
+            _unitOfWork = new UnitOfWork(_dbContextMock.Object, _serviceProviderMock.Object);
 
             //_serviceCollectionMock.Object.RegisterInfrastructureServices();
         }
@@ -34,14 +36,6 @@ namespace SampleProject.Infrastructure.Test
                 .Setup(x => x.GetService(typeof(IStudentRepository)))
                 .Returns(It.IsAny<IStudentRepository>());
 
-            //var services = new ServiceCollection();
-            //services.AddDbContext<SampleProjectDbContext>(options => {
-            //    options.UseSqlServer("DefaultConnection");
-            //});
-            //services.RegisterInfrastructureServices();
-            //var serviceProvider = services.BuildServiceProvider();
-            //var appState = serviceProvider.GetRequiredService<IStudentRepository>();
-            
             // Act
             var result = _unitOfWork.StudentRepository;
 
