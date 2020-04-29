@@ -60,7 +60,6 @@ namespace SampleProject.Core.Test
             _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(new Course()));
             _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(false);
             _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-
             var input = new RegisterCourseInput()
             {
                 StudentId = 1,
@@ -82,7 +81,6 @@ namespace SampleProject.Core.Test
             _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(new Course()));
             _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(true);
             _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-
             var input = new RegisterCourseInput()
             {
                 StudentId = 1,
@@ -109,7 +107,6 @@ namespace SampleProject.Core.Test
             _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(course));
             _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(false);
             _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-
             var input = new RegisterCourseInput()
             {
                 StudentId = 1,
@@ -136,7 +133,6 @@ namespace SampleProject.Core.Test
             _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(course));
             _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(true);
             _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-
             var input = new RegisterCourseInput()
             {
                 StudentId = 1,
@@ -155,7 +151,7 @@ namespace SampleProject.Core.Test
         {
             // Arrange
             IEnumerable<Course> courseList = new List<Course>();
-            _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func <Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
+            _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func<Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
             IEnumerable<CourseVM> courseVmList = new List<CourseVM>();
             _mapperMock.Setup(m => m.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(It.IsAny<IEnumerable<Course>>())).Returns(courseVmList);
 
@@ -164,6 +160,39 @@ namespace SampleProject.Core.Test
 
             // Assert
             Assert.IsAssignableFrom<GetAllCoursesOutput>(result);
+        }
+
+        [Test]
+        public async Task Should_Return_3_Record()
+        {
+            // Arrange
+            IEnumerable<Course> courseList = new List<Course>();
+            _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func<Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
+            IEnumerable<CourseVM> courseVmList = new List<CourseVM>()
+            {
+                new CourseVM(){
+                    Id = 1,
+                    Name = "python",
+                    Description = "Wow"
+                },
+                new CourseVM(){
+                    Id = 2,
+                    Name = "javascript",
+                    Description = "Wow"
+                },
+                new CourseVM(){
+                    Id = 3,
+                    Name = "c#",
+                    Description = "Wow"
+                }
+            };
+            _mapperMock.Setup(m => m.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(It.IsAny<IEnumerable<Course>>())).Returns(courseVmList);
+
+            // Act
+            var result = await _courseService.GetAllAsync();
+
+            // Assert
+            Assert.IsTrue(result.Data.Count() == 3);
         }
     }
 }

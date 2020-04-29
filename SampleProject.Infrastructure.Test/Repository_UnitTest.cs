@@ -162,7 +162,7 @@ namespace SampleProject.Infrastructure.Test
                     LastName = "last"
                 };
                 repository.Update(entiy);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 stu = context.Students.FirstOrDefault(x => x.Id == 6);
             }
