@@ -171,5 +171,68 @@ namespace SampleProject.Infrastructure.Test
             Assert.AreEqual("john", stu.FirstName);
             Assert.AreEqual("last", stu.LastName);
         }
+
+        [Test]
+        public async Task Should_Return_Student()
+        {
+            // Arrange
+            var student = new Student()
+            {
+                Id = 7,
+                FirstName = "Johny",
+                LastName = "Depp",
+                RegisteredCourses = new List<RegisteredCourse> {
+                    new RegisteredCourse { Id = 4, CourseId = 1, StudentId = 7 }
+                }
+            };
+            using (var context = new SampleProjectDbContext(dbContextOptions))
+            {
+                context.Students.Add(student);
+                context.SaveChanges();
+            }
+            IStudent stu;
+
+            // Act
+            using (var context = new SampleProjectDbContext(dbContextOptions))
+            {
+                IStudentRepository repository = new StudentRepository(context);
+                stu = await repository.GetStudentWithRegisteredCourses(7);
+            }
+
+            // Assert
+            Assert.IsAssignableFrom<Student>(stu);
+        }
+
+        [Test]
+        public async Task Should_Return_Student_With_Registered_Courses()
+        {
+            // Arrange
+            var student = new Student()
+            {
+                Id = 8,
+                FirstName = "Johny",
+                LastName = "Depp",
+                RegisteredCourses = new List<RegisteredCourse> {
+                    new RegisteredCourse { Id = 4, CourseId = 1, StudentId = 8 }
+                }
+            };
+            using (var context = new SampleProjectDbContext(dbContextOptions))
+            {
+                context.Students.Add(student);
+                context.SaveChanges();
+            }
+            IStudent stu;
+
+            // Act
+            using (var context = new SampleProjectDbContext(dbContextOptions))
+            {
+                IStudentRepository repository = new StudentRepository(context);
+                stu = await repository.GetStudentWithRegisteredCourses(8);
+            }
+
+            // Assert
+            Assert.IsTrue(stu.RegisteredCourses.Count() == 1);
+            Assert.IsTrue(stu.RegisteredCourses.FirstOrDefault().CourseId == 1);
+        }
     }
 }
