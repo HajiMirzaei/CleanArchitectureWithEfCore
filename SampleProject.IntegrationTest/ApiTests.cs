@@ -35,7 +35,6 @@ namespace SampleProject.IntegrationTest
             Assert.AreEqual("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
         }
 
-
         [Test]
         public async Task Register_Course_Should_Be_Ok()
         {
