@@ -213,7 +213,7 @@ namespace SampleProject.Infrastructure.Test
                 FirstName = "Johny",
                 LastName = "Depp",
                 RegisteredCourses = new List<RegisteredCourse> {
-                    new RegisteredCourse { Id = 4, CourseId = 1, StudentId = 8 }
+                    new RegisteredCourse { Id = 5, CourseId = 1, StudentId = 8 }
                 }
             };
             using (var context = new SampleProjectDbContext(dbContextOptions))
