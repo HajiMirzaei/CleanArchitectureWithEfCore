@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using SampleProject.Core.IoC;
 using SampleProject.Infrastructure.Data;
 using SampleProject.Infrastructure.IoC;
+using SampleProject.WebApi.IoC;
 
 namespace SampleProject.WebApi
 {
@@ -32,6 +33,7 @@ namespace SampleProject.WebApi
 
             services.RegisterCoreServices();
             services.RegisterInfrastructureServices();
+            services.RegisterApiServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

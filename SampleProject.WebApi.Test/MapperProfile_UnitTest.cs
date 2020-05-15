@@ -1,11 +1,11 @@
 using AutoMapper;
 using NUnit.Framework;
-using SampleProject.Core.Mapper;
+using SampleProject.WebApi.Mapper;
 using SampleProject.Core.Entities;
 using SampleProject.Core.DTOs;
 using System.Linq;
 
-namespace SampleProject.Core.Test
+namespace SampleProject.WebApi.Test
 {
     public class MapperProfile_UnitTest
     {

@@ -18,11 +18,13 @@ namespace SampleProject.Core.Entities
 
         public bool RegisterForCourse(Course course)
         {
+            if (course == null) return false;
+
             // student has not previously registered
-            if (RegisteredCourses.Any(ec => ec.CourseId == course.Id)) return false;
+            if (RegisteredCourses.Any(ec => ec.CourseId == course?.Id)) return false;
 
             // registratraion cannot occur with 5 days of course start date
-            if (DateTime.Now > course.StartDate.AddDays(5)) return false;
+            if (DateTime.Now > course?.StartDate.AddDays(5)) return false;
 
             return true;
         }

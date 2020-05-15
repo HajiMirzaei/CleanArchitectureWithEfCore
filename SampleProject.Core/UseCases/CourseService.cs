@@ -11,14 +11,14 @@ namespace SampleProject.Core.UseCases
     public class CourseService : ICourseService
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
-        public CourseService(IUnitOfWork uow, IMapper mapper)
+        //private readonly IMapper _mapper;
+        public CourseService(IUnitOfWork uow)
         {
             _uow = uow;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
-        public async Task<RegisterCourseOutput> RegisterCourseAsync(RegisterCourseInput arg)
+        public async Task<List<string>> RegisterCourseAsync(RegisterCourseInput arg)
         {
             var student = await _uow.StudentRepository.GetStudentWithRegisteredCourses(arg.StudentId);
 
@@ -29,7 +29,7 @@ namespace SampleProject.Core.UseCases
                 var res = student.RegisterForCourse(course);
                 if (!res)
                 {
-                    errors.Add($"unable to register for {course.Name}");
+                    errors.Add($"unable to register for {course?.Name}");
                 }
                 else
                 {
@@ -42,15 +42,16 @@ namespace SampleProject.Core.UseCases
                     await _uow.CommitAsync();
                 }
             }
-            
-            return new RegisterCourseOutput(!errors.Any(), errors, errors.Any() ? null : "Congratulates");
+            return errors;
+            //return new RegisterCourseOutput(!errors.Any(), errors, errors.Any() ? null : "Congratulates");
         }
 
-        public async Task<GetAllCoursesOutput> GetAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
             var data = await _uow.CourseRepository.GetAllAsync(null, x => x.OrderByDescending(x => x.Id));
-            var result = _mapper.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(data);
-            return new GetAllCoursesOutput(true, result);
+            return data;
+            //var result = _mapper.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(data);
+            //return new GetAllCoursesOutput(true, result);
         }
     }
 }

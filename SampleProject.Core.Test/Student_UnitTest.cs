@@ -99,5 +99,24 @@ namespace SampleProject.Core.Test
             // Assert
             Assert.IsTrue(result);
         }
+
+        [Test]
+        public void Should_Return_False3()
+        {
+            // Arrange
+            _student = new Student()
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Cena",
+                RegisteredCourses = new List<RegisteredCourse>()
+            };
+
+            // Act
+            var result = _student.RegisterForCourse(null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }

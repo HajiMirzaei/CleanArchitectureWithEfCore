@@ -18,20 +18,18 @@ namespace SampleProject.Core.Test
     {
         private CourseService _courseService;
         private Mock<IUnitOfWork> _uowMock;
-        private Mock<IMapper> _mapperMock;
         private Mock<IStudent> _studentMock;
 
         [SetUp]
         public void Setup()
         {
             _uowMock = new Mock<IUnitOfWork>();
-            _mapperMock = new Mock<IMapper>();
             _studentMock = new Mock<IStudent>();
-            _courseService = new CourseService(_uowMock.Object, _mapperMock.Object);
+            _courseService = new CourseService(_uowMock.Object);
         }
 
         [Test]
-        public async Task Should_Return_RegisterCourseOutput_Instance()
+        public async Task Should_Return_List_String_Instance()
         {
             // Arrange
             _uowMock.Setup(p => p.StudentRepository.GetStudentWithRegisteredCourses(It.IsAny<int>())).Returns(Task.FromResult(_studentMock.Object));
@@ -49,7 +47,7 @@ namespace SampleProject.Core.Test
             var result = await _courseService.RegisterCourseAsync(input);
 
             // Assert
-            Assert.IsAssignableFrom<RegisterCourseOutput>(result);
+            Assert.IsAssignableFrom<List<string>>(result);
         }
 
         [Test]
@@ -70,7 +68,7 @@ namespace SampleProject.Core.Test
             var result = await _courseService.RegisterCourseAsync(input);
 
             // Assert
-            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Any());
         }
 
         [Test]
@@ -91,7 +89,7 @@ namespace SampleProject.Core.Test
             var result = await _courseService.RegisterCourseAsync(input);
 
             // Assert
-            Assert.IsTrue(result.Success);
+            Assert.IsFalse(result.Any());
         }
 
         [Test]
@@ -117,34 +115,34 @@ namespace SampleProject.Core.Test
             var result = await _courseService.RegisterCourseAsync(input);
 
             // Assert
-            Assert.IsTrue(result.Errors.First() == "unable to register for Javascript");
+            Assert.IsTrue(result.Contains("unable to register for Javascript"));
         }
 
-        [Test]
-        public async Task Should_Return_Congratulates()
-        {
-            // Arrange
-            var course = new Course
-            {
-                Id = 1,
-                Name = "Javascript"
-            };
-            _uowMock.Setup(p => p.StudentRepository.GetStudentWithRegisteredCourses(It.IsAny<int>())).Returns(Task.FromResult(_studentMock.Object));
-            _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(course));
-            _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(true);
-            _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-            var input = new RegisterCourseInput()
-            {
-                StudentId = 1,
-                SelectedCourseCodes = new List<int> { 1 }
-            };
+        //[Test]
+        //public async Task Should_Return_Congratulates()
+        //{
+        //    // Arrange
+        //    var course = new Course
+        //    {
+        //        Id = 1,
+        //        Name = "Javascript"
+        //    };
+        //    _uowMock.Setup(p => p.StudentRepository.GetStudentWithRegisteredCourses(It.IsAny<int>())).Returns(Task.FromResult(_studentMock.Object));
+        //    _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(course));
+        //    _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(true);
+        //    _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
+        //    var input = new RegisterCourseInput()
+        //    {
+        //        StudentId = 1,
+        //        SelectedCourseCodes = new List<int> { 1 }
+        //    };
 
-            // Act
-            var result = await _courseService.RegisterCourseAsync(input);
+        //    // Act
+        //    var result = await _courseService.RegisterCourseAsync(input);
 
-            // Assert
-            Assert.IsTrue(result.Message == "Congratulates");
-        }
+        //    // Assert
+        //    Assert.IsTrue(result.Message == "Congratulates");
+        //}
 
         [Test]
         public async Task Should_Return_GetAllCoursesOutput_Instance()
@@ -152,47 +150,43 @@ namespace SampleProject.Core.Test
             // Arrange
             IEnumerable<Course> courseList = new List<Course>();
             _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func<Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
-            IEnumerable<CourseVM> courseVmList = new List<CourseVM>();
-            _mapperMock.Setup(m => m.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(It.IsAny<IEnumerable<Course>>())).Returns(courseVmList);
 
             // Act
             var result = await _courseService.GetAllAsync();
 
             // Assert
-            Assert.IsAssignableFrom<GetAllCoursesOutput>(result);
+            Assert.IsAssignableFrom<List<Course>>(result);
         }
 
         [Test]
         public async Task Should_Return_3_Record()
         {
             // Arrange
-            IEnumerable<Course> courseList = new List<Course>();
-            _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func<Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
-            IEnumerable<CourseVM> courseVmList = new List<CourseVM>()
+            IEnumerable<Course> courseList = new List<Course>()
             {
-                new CourseVM(){
+                new Course(){
                     Id = 1,
                     Name = "python",
                     Description = "Wow"
                 },
-                new CourseVM(){
+                new Course(){
                     Id = 2,
                     Name = "javascript",
                     Description = "Wow"
                 },
-                new CourseVM(){
+                new Course(){
                     Id = 3,
                     Name = "c#",
                     Description = "Wow"
                 }
             };
-            _mapperMock.Setup(m => m.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(It.IsAny<IEnumerable<Course>>())).Returns(courseVmList);
+            _uowMock.Setup(p => p.CourseRepository.GetAllAsync(It.IsAny<Expression<Func<Course, bool>>>(), It.IsAny<Func<IQueryable<Course>, IOrderedQueryable<Course>>>(), It.IsAny<string>())).Returns(Task.FromResult(courseList));
 
             // Act
             var result = await _courseService.GetAllAsync();
 
             // Assert
-            Assert.IsTrue(result.Data.Count() == 3);
+            Assert.IsTrue(result.Count() == 3);
         }
     }
 }

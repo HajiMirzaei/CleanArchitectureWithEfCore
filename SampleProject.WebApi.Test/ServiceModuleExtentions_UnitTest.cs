@@ -1,11 +1,10 @@
+﻿using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using SampleProject.Core.Contracts;
-using SampleProject.Core.IoC;
-using System.Linq;
+using SampleProject.WebApi.IoC;
 
-namespace SampleProject.Core.Test
+namespace SampleProject.WebApi.Test
 {
     public class ServiceModuleExtentions_UnitTest
     {
@@ -18,13 +17,13 @@ namespace SampleProject.Core.Test
         }
 
         [Test]
-        public void Should_Register_Scoped_ICourseService()
+        public void Should_Register_Singleton_AutoMapper()
         {
             // Act
-            _serviceCollection.RegisterCoreServices();
+            _serviceCollection.RegisterApiServices();
 
             // Assert
-            Assert.IsTrue(_serviceCollection.Any(x => x.ServiceType == typeof(ICourseService) && x.Lifetime == ServiceLifetime.Scoped));
+            Assert.IsTrue(_serviceCollection.Any(x => x.ServiceType == typeof(IMapper) && x.Lifetime == ServiceLifetime.Singleton));
         }
     }
 }
