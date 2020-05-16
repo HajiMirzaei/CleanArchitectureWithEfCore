@@ -79,5 +79,19 @@ namespace SampleProject.WebApi.Test
             // Assert
             _courseServiceMock.Verify(x => x.RegisterCourseAsync(It.IsAny<RegisterCourseInput>()), Times.Once);
         }
+
+        [Test]
+        public async Task Should_Return_Congratulates()
+        {
+            // Arrange
+            List<string> errors = new List<string>();
+            _courseServiceMock.Setup(p => p.RegisterCourseAsync(It.IsAny<RegisterCourseInput>())).Returns(Task.FromResult(errors));
+
+            // Act
+            var result = await _courseController.RegisterCourse(It.IsAny<RegisterCourseInput>());
+
+            // Assert
+            Assert.IsTrue(result.Message == "Congratulates");
+        }
     }
 }

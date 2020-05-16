@@ -118,32 +118,6 @@ namespace SampleProject.Core.Test
             Assert.IsTrue(result.Contains("unable to register for Javascript"));
         }
 
-        //[Test]
-        //public async Task Should_Return_Congratulates()
-        //{
-        //    // Arrange
-        //    var course = new Course
-        //    {
-        //        Id = 1,
-        //        Name = "Javascript"
-        //    };
-        //    _uowMock.Setup(p => p.StudentRepository.GetStudentWithRegisteredCourses(It.IsAny<int>())).Returns(Task.FromResult(_studentMock.Object));
-        //    _uowMock.Setup(p => p.CourseRepository.GetByIdAsync(It.IsAny<int>())).Returns(Task.FromResult(course));
-        //    _studentMock.Setup(p => p.RegisterForCourse(It.IsAny<Course>())).Returns(true);
-        //    _uowMock.Setup(p => p.RegisteredCourseRepository.AddAsync(It.IsAny<RegisteredCourse>()));
-        //    var input = new RegisterCourseInput()
-        //    {
-        //        StudentId = 1,
-        //        SelectedCourseCodes = new List<int> { 1 }
-        //    };
-
-        //    // Act
-        //    var result = await _courseService.RegisterCourseAsync(input);
-
-        //    // Assert
-        //    Assert.IsTrue(result.Message == "Congratulates");
-        //}
-
         [Test]
         public async Task Should_Return_GetAllCoursesOutput_Instance()
         {

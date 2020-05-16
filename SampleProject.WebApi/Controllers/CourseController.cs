@@ -34,7 +34,6 @@ namespace SampleProject.WebApi.Controllers
         {
             var result = await _courseService.RegisterCourseAsync(args);
             return new RegisterCourseOutput(!result.Any(), result, result.Any() ? null : "Congratulates");
-            //return result;
         }
     }
 }
