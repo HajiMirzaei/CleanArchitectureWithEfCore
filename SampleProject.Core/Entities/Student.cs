@@ -23,7 +23,7 @@ namespace SampleProject.Core.Entities
             // student has not previously registered
             if (RegisteredCourses.Any(ec => ec.CourseId == course?.Id)) return false;
 
-            // registratraion cannot occur with 5 days of course start date
+            // registratraion cannot occur within 5 days of course start date
             if (DateTime.Now > course?.StartDate.AddDays(5)) return false;
 
             return true;

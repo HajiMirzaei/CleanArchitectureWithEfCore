@@ -26,7 +26,9 @@ namespace SampleProject.Core.UseCases
             foreach (var item in arg.SelectedCourseCodes)
             {
                 var course = await _uow.CourseRepository.GetByIdAsync(item);
+
                 var res = student.RegisterForCourse(course);
+
                 if (!res)
                 {
                     errors.Add($"unable to register for {course?.Name}");
